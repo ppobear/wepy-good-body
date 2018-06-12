@@ -1,0 +1,109 @@
+<template>
+  <view class="meals-list">
+    <repeat for="{{list}}" key="index" index="index" item="item">
+      <mealItem :mealItem="item"></mealItem>
+    </repeat>
+  </view>
+</template>
+<style lang="scss" scoped>
+  .meals-list{
+    width: 100%;
+  }
+</style>
+<script>
+import wepy from 'wepy'
+import MealsListItem from '../components/meals-list-item'
+export default class MealsList extends wepy.component{
+  data = {
+    list: [
+      {
+        title: '早餐',
+        usedContainerList: [
+          {
+            type: 'veg',
+            used: 1
+          },
+          {
+            type: 'fruits',
+            used: 3
+          },
+          {
+            type: 'proteins',
+            used: 1
+          },
+          {
+            type: 'fat',
+            used: 0.5
+          },
+        ]
+      },
+      {
+        title: '午餐',
+        usedContainerList: [
+          {
+            type: 'veg',
+            used: 1
+          },
+          {
+            type: 'fruits',
+            used: 3
+          },
+          {
+            type: 'proteins',
+            used: 1
+          },
+          {
+            type: 'fat',
+            used: 0.5
+          },
+        ]
+      },
+      {
+        title: '晚餐',
+        usedContainerList: [
+          {
+            type: 'veg',
+            used: 1
+          },
+          {
+            type: 'fruits',
+            used: 3
+          },
+          {
+            type: 'proteins',
+            used: 1
+          },
+          {
+            type: 'fat',
+            used: 0.5
+          },
+        ]
+      },
+      {
+        title: '小吃-1',
+        usedContainerList: [
+          {
+            type: 'veg',
+            used: 1
+          },
+          {
+            type: 'fruits',
+            used: 3
+          },
+          {
+            type: 'proteins',
+            used: 1
+          },
+          {
+            type: 'fat',
+            used: 0.5
+          },
+        ]
+      },
+    ]
+  }
+  components = {
+    mealItem: MealsListItem
+  }
+}
+</script>

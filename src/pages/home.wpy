@@ -23,7 +23,7 @@
     <view class="container-list">
       <containerItems></containerItems>
     </view>
-    <mealsListItem></mealsListItem>
+    <mealsList></mealsList>
   </view>
 </template>
 <script>
@@ -34,7 +34,7 @@ import {
 import LineCalendar from '../components/calendar'
 import DailyItems from '../components/daily-items'
 import RemainContainerList from '../components/remain-container-list'
-import MealsListItem from '../components/meals-list-item'
+import MealsList from '../components/meals-list'
 export default class Home extends wepy.page {
   config = {
     navigationBarTitleText: '主页'
@@ -43,7 +43,7 @@ export default class Home extends wepy.page {
     lineCalendar: LineCalendar,
     dailyItems: DailyItems,
     containerItems: RemainContainerList,
-    mealsListItem: MealsListItem
+    mealsList: MealsList
   }
   data = {
     avatarUrl: '',

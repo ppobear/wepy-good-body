@@ -1,10 +1,10 @@
 <template>
     <view class="meals-row">
       <view class="meals-title">
-        早餐
+        {{mealItem.title}}
       </view>
       <view class="meals-list-item">
-        <repeat for="{{list}}" key="index" index="index" item="item">
+        <repeat for="{{mealItem.usedContainerList}}" key="index" index="index" item="item">
           <view class="{{item.type}}">
             {{item.used}}
           </view>
@@ -20,10 +20,11 @@
   flex-direction: flex-row;
   align-items: center;
   height:100rpx;
-  margin:30rpx 20rpx 10rpx 20rpx;
+  margin:10rpx 20rpx 10rpx 20rpx;
   background: white;
   padding-left: 15rpx;
   padding-right: 15rpx;
+  border-radius: 8rpx;
   .meals-title{
     font-size: 16px;
   }
@@ -34,6 +35,7 @@
     justify-content: flex-end;
     height: 60rpx;
     width: 100%;
+    align-items: center;
     .meals-right-arrow{
       height: 50rpx;
       width: 50rpx;
@@ -80,6 +82,7 @@
 import wepy from 'wepy'
 export default class MealsListItem extends wepy.component{
     data = {
+    title: '早餐',
     list: [
       {
         used: 4,
@@ -112,6 +115,15 @@ export default class MealsListItem extends wepy.component{
         type: 'nuts'
       }
     ]
+  }
+  props = {
+    mealItem : {
+      default: {
+        title: '早餐',
+        usedContainerList: []
+      },
+      type: Object
+    }
   }
   methods={}
   onLoad(){}
