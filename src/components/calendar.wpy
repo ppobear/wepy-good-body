@@ -1,0 +1,255 @@
+<template>
+<view class="line-container" @touchstart="ts" @touchmove="tm" @touchend="te">
+    <repeat for="{{list}}" key="index" index="index" item="item">
+      <view class="single-day" @tap="clickDay({{item}})">
+        <!-- 星期 -->
+        <view class="week">{{item.week}}</view>
+        <!-- 日期 -->
+        <view class="day {{item.select ? 'day-select' : 'day-normal'}}">{{item.day}}</view>
+        <!-- 标记 -->
+        <view class="round {{item.isIn ? 'round-in' : 'round-not-in' }}"></view>
+      </view>
+    </repeat>
+</view>
+</template>
+<style lang="less">
+.line-container {
+  display: flex;
+  padding-left: 4.5%;
+  background:white;
+}
+.single-day {
+  width: 13%;
+  .week {
+    font-size: 24rpx;
+    color: grey;
+    text-align: center;
+  }
+  .day {
+    font-size: 32rpx;
+    text-align: center;
+    height: 46rpx;
+    width: 46rpx;
+    margin: 0px auto;
+  }
+  .day-normal{
+    color: black;
+  }
+  .day-select{
+    color: white;
+    background: black;
+    border-radius: 50%;
+  }
+
+  .round {
+    margin-top: 2rpx;
+    width: 12rpx;
+    height: 12rpx;
+    border-radius: 50%;
+    margin: 0px auto;
+  }
+  .round-in{
+    background-color: green;
+  }
+  .round-not-in{
+    border: 2rpx solid grey;
+  }
+}
+</style>
+<script>
+import wepy from 'wepy'
+import moment from 'moment'
+
+let touchDot = 0;//触摸时的原点
+let time = 0;// 时间记录，用于滑动时且时间小于1s则执行左右滑动
+let interval = "";// 记录/清理时间记录
+let touchMove = null;
+export default class LineCalendar extends wepy.component {
+  data = {
+    weeksCh: ['一', '二', '三', '四', '五', '六', '日'],
+    list: [
+      { week: '一', day: '8', isIn: false, select: false },
+      { week: '二', day: '9', isIn: true, select: false },
+      { week: '三', day: '10', isIn: true, select: false },
+      { week: '四', day: '11', isIn: false, select: false },
+      { week: '五', day: '12', isIn: true, select: false },
+      { week: '六', day: '13', isIn: true, select: false },
+      { week: '日', day: '14', isIn: true, select: false }
+    ],
+    value: {
+      type: String,
+      default: moment().format('YYYY-MM-DD')
+    },
+      // 数组最后导出的日期
+    current: {
+      year: '',
+      month: '',
+      day: '',
+      formatDay: '',
+      weekCh: '',
+      select: false
+    },
+  };
+  methods = {
+    clickDay( item ){
+      for(let i = 0; i < this.list.length; i++) {
+        if( this.list[i].day === item.day ){
+          this.list[i].select = true
+        } else {
+          this.list[i].select = false
+        }
+
+      }
+      console.log("clickDay: day:" + item.day)
+      this.$emit('hanleClickDay', item.day)
+
+    },
+    ts(e){
+       touchDot = e.touches[0].pageX // 获取触摸时的原点
+      // 使用js计时器记录时间
+      interval = setInterval(function () {
+        time++
+        }, 100)
+    },
+    tm(e){
+      touchMove = e.touches[0].pageX
+      // // 向左滑动
+      // if (touchMove - touchDot <= -200 && time < 10) {
+      //   console.log("左滑")
+      // }
+      //  if (touchMove - touchDot >= 200 && time < 10) {
+      //     console.log('向右滑动');
+      // }
+    },
+    te(e){
+      // 向左滑动
+      if (touchMove - touchDot <= -200 && time < 10) {
+        console.log("左滑")
+      }
+       if (touchMove - touchDot >= 200 && time < 10) {
+          console.log('向右滑动')
+          this.toPreWeek()
+      }
+      clearInterval(interval)
+      time = 0
+    }
+  };
+
+  onShow() {}
+
+  onLoad() {
+    var now = moment();
+    let date = this._getData(now);
+    this.list = date;
+    console.log("lineCalendar: " + date);
+  }
+
+  /**
+   * _setTime
+   * 设定导出的时间
+   * @param time moment对象
+   */
+  _setTime (time = moment()) {
+    this.current = this._dealMoment(time)
+  }
+  /**
+   * _setTime
+   * 设定当前日历的时间
+   * @param time moment对象
+   */
+  _setViewTime (time = moment()) {
+    this.viewTime = this._dealMoment(time.startOf('month'))
+  }
+
+  /**
+   * _getData
+   * 返回当前视图日期数组
+   * @param time
+   * @return [{day:31,month:3,year:2018},{day:1,month:4,year:2018},...]
+   */
+  _getData (time = moment()) {
+    // 当月与末是星期几
+    const dayOfWeek = time.format('E')
+    let now = this._dealMoment(time);
+    console.log("now:" + now)
+    // 计算下个月多余时间
+    const next = this._calDate(time, 7 - dayOfWeek)
+    const pre = this._calPreData(time,  dayOfWeek - 1)
+    return [...pre, now, ...next]
+  }
+
+    /**
+   * _calDate
+   * 计算日期函数
+   * @param time moment对象
+   * @param length 返回数组的长度
+   * @return 返回日期数组
+   */
+  _calDate (time, length) {
+    let tmpTime = moment(time);
+    let arr = []
+    tmpTime.add(1,  'day')
+    for (let i = 0; i < length; i++) {
+      arr.push(this._dealMoment(tmpTime))
+      tmpTime.add(1, 'days')
+    }
+    return arr
+  }
+
+  /**
+   * 计算之前的日期函数
+   * @param time moment对象
+   * @param length 返回数组的长度 length < 0
+   * @return 返回日期数组
+   */
+  _calPreData (time, length) {
+    var tmpTime = moment(time)
+    length = length > 0 ? length : -length
+    tmpTime.subtract(length, 'day')
+    let arr2 = [];
+    for ( let i = length; i > 0; i-- ) {
+      arr2.push(this._dealMoment(tmpTime))
+      tmpTime.add(1, 'day')
+      console.log("_calPreData:" + tmpTime.format())
+    }
+    return arr2
+  }
+  /**
+   * _dealMoment
+   * 处理moment对象
+   * @param time moment对象
+   * @return 返回一个Object{year, month, day, formatDay}
+   */
+  _dealMoment (time) {
+    let { years, months, date } = time.toObject()
+    return {
+      year: years,
+      month: months + 1,
+      day: date,
+      week: '周' + this.weeksCh[time.format('E') - 1],
+      formatDay: time.format('YYYY-MM-DD'),
+      select: false
+    }
+  }
+
+  /**
+   * 切换到上一周
+   */
+  toPreWeek(){
+    let mondayStr = this.list[0]
+    let monday = moment(mondayStr.formatDay)
+
+    this.list = this._getData(monday.subtract(1, "day"))
+  }
+  /**
+   * 切换到下一周
+   */
+  toNextWeek(){
+
+  }
+
+}
+</script>
+
+
+

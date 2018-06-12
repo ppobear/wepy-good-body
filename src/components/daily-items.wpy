@@ -1,0 +1,105 @@
+<template>
+<view>
+  <repeat for="{{list}}" key="index" index="index" item="item">
+    <view class="top-view">
+      <!-- 左边的图标 -->
+      <image class="left-img" src="{{item.img_url}}">
+      <!-- 文字描述 -->
+      <view class="text-info">
+        <view class="first-line">{{item.name}} : {{item.target}}</view>
+        <view class="sec-line">{{item.target_tips}}</view>
+      </view>
+      <!-- 加号 -->
+      <image class="right-img" wx:if="{{item.progress == null}}" src="../images/add.png">
+      <!-- 当日进度 -->
+      <view class="today-progress" wx:if="{{item.progress != null}}">
+        <view class="first-line">{{item.progress}}</view>
+        <view class="sec-line">{{item.progress_tips}}</view>
+      </view>
+    </view>
+  </repeat>
+</view>
+
+</template>
+<style lang="scss">
+  .top-view{
+    display: flex;
+    background: white;
+    margin: 10rpx 20rpx 10rpx 20rpx;
+    height: 100rpx;
+    flex-direction: flex-row;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8rpx 8rpx 8rpx 8rpx;
+    padding-left: 20rpx;
+    padding-right: 20rpx;
+    .left-img{
+    width: 60rpx;
+    height: 60rpx;
+  }
+  .text-info{
+    flex: 1;
+    margin-left: 30rpx;
+    .first-line{
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .sec-line{
+      font-size: 12px;
+      color: rgb(160, 160, 160);
+    }
+  }
+  .right-img{
+    width: 50rpx;
+    height: 50rpx;
+  }
+  .today-progress{
+    .first-line{
+      font-size: 14px;
+      font-weight: bold;
+      color: #62E26A;
+    }
+    .sec-line{
+      font-size: 12px;
+      color: rgb(160, 160, 160);
+    }
+  }
+  }
+
+</style>
+<script>
+import wepy from 'wepy'
+export default class DailyItems extends wepy.component{
+    data = {
+      isShowAdd: false,
+      list : [
+        {
+          img_url: '../images/drink.png',
+          name: '水',
+          target: '1000',
+          target_tips: 'ml,毫升',
+          progress: '50',
+          progress_tips: 'ml,毫升'
+        },
+        {
+          img_url: '../images/weight.png',
+          name: '体重',
+          target: '85',
+          target_tips: 'Kg,公斤',
+          progress: '86',
+          progress_tips: 'kg,公斤',
+        },
+        {
+          img_url: '../images/daican.png',
+          name: '代餐',
+          target: '取代部分或全部正餐的食物',
+          progress: null,
+        }
+      ]
+    }
+    methods = {}
+    onLoad() {}
+    onShow() {}
+
+}
+</script>

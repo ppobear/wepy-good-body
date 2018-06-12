@@ -1,0 +1,139 @@
+<template>
+  <view class="info">
+    <!-- 个人信息 进度 -->
+    <view class="header">
+      <view class="header_account">
+        <image class="avatarUrl" src="{{avatarUrl}}"></image>
+        <view class="nickName cfff">{{nickName}}</view>
+      </view>
+      <view class="header_progress">
+        <view class="nickName cfff">已控制饮食30天</view>
+        <view class="nickName cfff">Keep Moving</view>
+      </view>
+    </view>
+    <lineCalendar class="calendar-list" @hanleClickDay.user="hanleClickDay"></lineCalendar>
+    <!-- Track water weight shakeology -->
+    <dailyItems class="daily-items"></dailyItems>
+    <view class="container">
+      <view class="container-name">容器</view>
+      <view class="middle"></view>
+      <view class="food-list-name">食物列表</view>
+      <image class="right-arrow" src="../images/right_arrow.png">
+    </view>
+    <view class="container-list">
+      <containerItems></containerItems>
+    </view>
+    <mealsListItem></mealsListItem>
+  </view>
+</template>
+<script>
+import wepy from 'wepy'
+import {
+  USER_INFO
+} from '@/utils/constant'
+import LineCalendar from '../components/calendar'
+import DailyItems from '../components/daily-items'
+import RemainContainerList from '../components/remain-container-list'
+import MealsListItem from '../components/meals-list-item'
+export default class Home extends wepy.page {
+  config = {
+    navigationBarTitleText: '主页'
+  }
+  components = {
+    lineCalendar: LineCalendar,
+    dailyItems: DailyItems,
+    containerItems: RemainContainerList,
+    mealsListItem: MealsListItem
+  }
+  data = {
+    avatarUrl: '',
+    nickName: '',
+    bShowBind: false
+  }
+  onLoad() {
+    let that = this
+    let userInfo = wepy.getStorageSync(USER_INFO)
+    that.avatarUrl = userInfo.avatarUrl
+    that.nickName = userInfo.nickName
+  }
+  onShow() {
+  }
+  computed = {
+
+  }
+  methods = {
+    hanleClickDay(e) {
+      console.log('hanleClickDay:' + e)
+    }
+
+  }
+  events = {
+
+  }
+}
+</script>
+<style lang="less">
+.info{
+  background: #F0F0F0;
+}
+.header {
+  background: #ff6a3c;
+  height: 260rpx;
+  width: 100%;
+  display: flex;
+}
+
+.header_account {
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 48rpx;
+}
+.header_progress{
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 48rpx;
+}
+
+.avatarUrl {
+  width: 122rpx;
+  height: 122rpx;
+  border-radius: 1000px;
+}
+
+.nickName {
+  font-size: 30rpx;
+  padding-top: 15rpx;
+}
+.calendar-list{
+  margin-top: 30rpx;
+}
+.daily-items{
+  margin-top: 30rpx;
+}
+.container{
+  margin: 30rpx 20rpx 10rpx 20rpx;
+  display: flex;
+  flex-direction: row;
+  display: flex;
+  .container-name{
+    font-size: 18px;
+  }
+  .middle{
+    flex: 1;
+  }
+  .food-list-name{
+    font-size: 14px;
+  }
+  .right-arrow{
+    width: 40rpx;
+    height: 40rpx;
+  }
+}
+.container-list{
+    margin: 30rpx 20rpx 10rpx 20rpx;
+    background: white;
+    padding-bottom:30rpx;
+}
+</style>

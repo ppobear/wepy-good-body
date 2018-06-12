@@ -1,0 +1,121 @@
+<template>
+  <view class="containerlist-view">
+     <repeat for="{{list}}" key="index" index="index" item="item">
+        <comtainerItem :container.sync="item"></comtainerItem>
+     </repeat>
+  </view>
+</template>
+<style lang="scss">
+.containerlist-view{
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+
+</style>
+<script>
+import wepy from 'wepy'
+import ContainerItem from './container-item'
+import {
+  CONTAINER_TYPE_VEG,
+  CONTAINER_TYPE_FRUITS,
+  CONTAINER_TYPE_PORTEINS,
+  CONTAINER_TYPE_CARBS,
+  CONTAINER_TYPE_FAT,
+  CONTAINER_TYPE_NUTS,
+  CONTAINER_VEG_COLOR,
+  CONTAINER_FRUITS_COLOR,
+  CONTAINER_PROTEINS_COLOR,
+  CONTAINER_CARBS_COLOR,
+  CONTANIER_FAT_COLOR,
+  CONTAINER_NUTS_COLOR,
+  CONTAINER_DEFAULT_COLOR
+} from '@/utils/constant'
+export default class RemainContainerList extends wepy.component {
+  data = {
+    list: [
+      {
+        used: 4,
+        total: 3,
+        type: 'veg'
+       },
+      {
+        used: 1,
+        total: 2,
+        type: 'fruits'
+      },
+      {
+        used: 2,
+        total: 3,
+        type: 'proteins'
+      },
+      {
+        used: 1.5,
+        total: 4,
+        type: 'carbs'
+      },
+      {
+        used: 3,
+        total: 5,
+        type: 'fat'
+      },
+      {
+        used: 2,
+        total: 6,
+        type: 'nuts'
+      }
+    ]
+  }
+  components = {
+    comtainerItem: ContainerItem
+  }
+  methods = {}
+  onShow() {}
+  onLoad() {
+    for(let index = 0; index < this.list.length; index++) {
+      this.list[index].borderColor = this.getContainerColor(this.list[index].type)
+      this.list[index].borderLeftColor = this.list[index].borderColor
+      this.list[index].borderTopColor = this.list[index].borderColor
+      this.list[index].borderRightColor = this.list[index].borderColor
+      this.list[index].borderBottomColor = this.list[index].borderColor
+      this.list[index].disCount = this.list[index].total - this.list[index].used
+      let percent = this.list[index].used/this.list[index].total * 100
+      if( percent <= 25 ) {
+        this.list[index].borderLeftColor = CONTAINER_DEFAULT_COLOR
+      } else if( percent > 25 && percent <= 50 ) {
+        this.list[index].borderLeftColor = CONTAINER_DEFAULT_COLOR
+        this.list[index].borderBottomColor = CONTAINER_DEFAULT_COLOR
+      } else if( percent > 50 && percent <= 75 ) {
+        this.list[index].borderLeftColor = CONTAINER_DEFAULT_COLOR
+        this.list[index].borderBottomColor = CONTAINER_DEFAULT_COLOR
+        this.list[index].borderRightColor = CONTAINER_DEFAULT_COLOR
+      } else if( percent > 75 && percent <= 100 ) {
+        this.list[index].borderLeftColor = CONTAINER_DEFAULT_COLOR
+        this.list[index].borderBottomColor = CONTAINER_DEFAULT_COLOR
+        this.list[index].borderRightColor = CONTAINER_DEFAULT_COLOR
+        this.list[index].borderTopColor = CONTAINER_TOP_COLOR
+      }
+
+    }
+  }
+    getContainerColor(type) {
+    if (type === CONTAINER_TYPE_VEG) {
+      return CONTAINER_VEG_COLOR
+    } else if (type === CONTAINER_TYPE_FRUITS) {
+      return CONTAINER_FRUITS_COLOR
+    } else if (type === CONTAINER_TYPE_PORTEINS) {
+      return CONTAINER_PROTEINS_COLOR
+    } else if (type === CONTAINER_TYPE_CARBS) {
+      return CONTAINER_CARBS_COLOR
+    } else if (type === CONTAINER_TYPE_FAT) {
+      return CONTANIER_FAT_COLOR
+    } else if (type === CONTAINER_TYPE_NUTS) {
+      return CONTAINER_NUTS_COLOR
+    }
+    return CONTAINER_VEG_COLOR
+  }
+}
+
+
+</script>

@@ -1,0 +1,120 @@
+<template>
+    <view class="meals-row">
+      <view class="meals-title">
+        早餐
+      </view>
+      <view class="meals-list-item">
+        <repeat for="{{list}}" key="index" index="index" item="item">
+          <view class="{{item.type}}">
+            {{item.used}}
+          </view>
+        </repeat>
+       <image class="meals-right-arrow" src="../images/right_arrow.png"></image>
+      </view>
+    </view>
+</template>
+<style lang="scss">
+@import '../style/base.scss';
+.meals-row{
+  display: flex;
+  flex-direction: flex-row;
+  align-items: center;
+  height:100rpx;
+  margin:30rpx 20rpx 10rpx 20rpx;
+  background: white;
+  padding-left: 15rpx;
+  padding-right: 15rpx;
+  .meals-title{
+    font-size: 16px;
+  }
+  .meals-list-item{
+    display: flex;
+    flex: 1;
+    flex-direction: flex-row;
+    justify-content: flex-end;
+    height: 60rpx;
+    width: 100%;
+    .meals-right-arrow{
+      height: 50rpx;
+      width: 50rpx;
+    }
+    .used-container{
+      width: 50rpx;
+      height: 50rpx;
+      line-height: 50rpx;
+      border-radius: 8rpx;
+      color: white;
+      font-size:14px;
+      text-align: center;
+      margin-left: 10rpx;
+    }
+    .veg{
+      @extend .used-container;
+      background: $container-color-veg;
+    }
+    .fruits{
+      @extend .used-container;
+      background: $container-color-fruits;
+    }
+    .proteins{
+      @extend .used-container;
+      background: $container-color-proteins;
+    }
+    .carbs{
+      @extend .used-container;
+      background: $container-color-carbs;
+    }
+    .fat{
+      @extend .used-container;
+      background: $container-color-fat;
+    }
+    .nuts{
+      @extend .used-container;
+      background: $container-color-nuts;
+    }
+}
+}
+
+</style>
+<script>
+import wepy from 'wepy'
+export default class MealsListItem extends wepy.component{
+    data = {
+    list: [
+      {
+        used: 4,
+        total: 3,
+        type: 'veg'
+       },
+      {
+        used: 1,
+        total: 2,
+        type: 'fruits'
+      },
+      {
+        used: 2,
+        total: 3,
+        type: 'proteins'
+      },
+      {
+        used: 1.5,
+        total: 4,
+        type: 'carbs'
+      },
+      {
+        used: 3,
+        total: 5,
+        type: 'fat'
+      },
+      {
+        used: 2,
+        total: 6,
+        type: 'nuts'
+      }
+    ]
+  }
+  methods={}
+  onLoad(){}
+  onShow(){}
+}
+</script>

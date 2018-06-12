@@ -1,0 +1,49 @@
+<template>
+  <view class="container-item" style="border-top-color: {{container.borderTopColor}};border-right-color: {{container.borderRightColor}};border-bottom-color: {{container.borderBottomColor}}; border-left-color: {{container.borderLeftColor}};color:{{container.disCount > 0 ? 'black' : 'red' }}">
+    {{container.disCount}}
+  </view>
+</template>
+<style lang="scss">
+@import '../style/base.scss';
+.container-item {
+  width: 12%;
+  height: 12vw;
+  line-height: 12vw;
+  border: 6rpx solid #EDEDED;
+  border-radius: 18rpx;
+  text-align: center;
+  font-size: 18px;
+  margin: 40rpx 0rpx 0rpx 40rpx;
+}
+</style>
+
+<script>
+import wepy from 'wepy'
+export default class ContainerItem extends wepy.component {
+  props = {
+    container: {
+      default: {
+        type: 'veg',
+        disCount: 1,
+        borderTopColor: '',
+        borderRightColor: '',
+        borderBottomColor: '',
+        borderLeftColor: ''
+      },
+      type: Object
+    }
+  }
+  data = {
+  }
+  methods = {
+  }
+  onLoad() {
+  }
+  onShow() {
+  }
+
+  watch = {
+  }
+
+}
+</script>
